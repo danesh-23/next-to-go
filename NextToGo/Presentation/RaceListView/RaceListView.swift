@@ -22,18 +22,18 @@ struct RaceListView: View {
                     if viewModel.isLoading {
                         ProgressView("Loading races...")
                             .accessibilityLabel("Loading races")
-                    } else if let error = viewModel.errorMessage {
-                        VStack {
-                            Text(error)
-                                .foregroundColor(.red)
-                                .multilineTextAlignment(.center)
-                            retryButton
-                        }
-                        .padding()
                     } else {
                         Text("No upcoming races")
                             .padding()
                     }
+                } else if let error = viewModel.errorMessage {
+                    VStack {
+                        Text(error)
+                            .foregroundColor(.red)
+                            .multilineTextAlignment(.center)
+                        retryButton
+                    }
+                    .padding()
                 } else {
                     racesList
                 }
@@ -103,5 +103,4 @@ struct RaceListView: View {
     private func isFilterOn(_ category: RaceCategory) -> Bool {
         viewModel.selectedCategories.isEmpty || viewModel.selectedCategories.contains(category)
     }
-
 }

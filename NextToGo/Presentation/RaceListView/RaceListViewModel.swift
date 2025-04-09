@@ -71,6 +71,7 @@ class RaceListViewModel: ObservableObject {
 
     /// Manually refreshes the races list (for pull-to-refresh & initial load).
     private func refreshRaces() async throws {
+        guard ConnectivityService.shared.isConnected else { throw NetworkError.offline }
         do {
             let updatedRaces = try await getNextRacesUseCase.execute(
                 for: selectedCategories,
