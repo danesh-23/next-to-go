@@ -10,6 +10,8 @@ import SwiftUI
 /// A view that displays a live countdown to a target date/time.
 struct CountdownView: View {
 
+    // MARK: Internal
+
     let targetDate: Date // The time the countdown is counting down to
 
     var body: some View {
@@ -23,6 +25,8 @@ struct CountdownView: View {
                 .frame(minWidth: 50, alignment: .trailing)
         }
     }
+
+    // MARK: Private
 
     /// Format a TimeInterval (seconds) into a M min S s string (or H h M min S s if >= 1 hour).
     private func formattedTime(from interval: TimeInterval) -> String {
