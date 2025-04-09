@@ -21,7 +21,7 @@ struct RaceListViewModelTests {
 
         let viewModel = RaceListViewModel(useCase: mockUseCase)
 
-        try await Poll.until(timeout: 3) {
+        await Poll.until(timeoutSeconds: 2) {
             await MainActor.run {
                 !viewModel.isLoading
             }
