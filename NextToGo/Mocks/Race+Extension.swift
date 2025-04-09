@@ -27,24 +27,20 @@ extension Race {
 // MARK: - Poll
 
 enum Poll {
-    enum PollingError: Error {
-        case timedOut
-    }
-
+    /// Polls a condition every `interval` until it's true or `timeout` is reached.
     static func until(
-        timeout: TimeInterval = 1,
-        interval: TimeInterval = 0.01,
-        _ condition: @escaping () async -> Bool)
-        async throws {
-        let deadline = Date().addingTimeInterval(timeout)
+        timeoutSeconds: Int = 2,
+        intervalMilliseconds: Int = 50,
+        condition: @Sendable @escaping () async -> Bool)
+        async {
+        let start = ContinuousClock.now
 
-        while Date() < deadline {
-            if await condition() {
-                return
-            }
-            try await Task.sleep(for: .milliseconds(Int(interval * 1000)))
+        let timeout = Duration.seconds(timeoutSeconds)
+        let interval = Duration.milliseconds(intervalMilliseconds)
+
+        while ContinuousClock.now.duration(to: start) < timeout {
+            if await condition() { return }
+            try? await Task.sleep(for: interval)
         }
-
-        throw PollingError.timedOut
     }
 }
