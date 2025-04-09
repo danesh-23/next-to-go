@@ -63,6 +63,7 @@ The app uses **Clean Architecture** layered as follows:
 | Using SwiftFormat and SwiftLint | SwiftFormat and SwiftLint were integrated to enforce consistent code style and proactively catch code quality issues across the entire codebase, ensuring long-term maintainability and team-wide alignment. We used AirBnb's linting and formatting styles loosely as I have modified some to suit the team better(just me) which is also to highlight, theres no hard and fast rules, theres best practices but they're mostly guidelines to adjust for your team. By automating formatting and static analysis, they also reduce cognitive overhead, accelerate onboarding, and allow reviewers to focus on architecture and logic rather than superficial style concerns — practices widely adopted in large-scale engineering teams to support scalable development and CI enforcement.|
 | Error propogation and handling | We use thrown errors across the app as throwing errors allow for it to be propogated to the desired level to be handled. All issues in the networking and repository and use case are propogated to the surface to be handled in the viewmodel and currently it just sets slightly different error messages which is immediately shown to the user and this handles failed decoding or networking issues due to lost connection etc. and in an ideal scenario, we would cast the thrown errors and handle them by displaying more useful error messages depending on the scenario since this provides a much better UX but I have decided to document this rather than implement it. | 
 | SwiftData for offline caching | Offline caching was introduced via a local data layer (RaceCacheRepositoryImpl) implemented using SwiftData, and integrated at the repository layer (RaceRepositoryImpl). This is a very simple caching layer as it's just a fun addition to demonstrate SwiftData integration and has not been passed all integration tests as due to lack of time, syncing with filtering logic as well as implement testing was skipped. This feature is also not enabled by default and can be added in by instructions to uncomment a line in the respository layer (RaceRepositoryImpl).|
+| Localization and Internationalization | This has been included in the features not implemented below but essentially not been focused on in this project and although they are pretty simple additions like adding supported languages in the Localization in Xcode and having Localizable.strings file and an extension on String to read this from the bundle but its tedious and didn't make the priority list of features with the little time I spent on it. |
 
 ---
 
@@ -134,11 +135,13 @@ Configured with best-practice rules including:
 
 ---
 
-## 🧩 Requirements Not Yet Implemented (Time Constraint)
+## 🧩 Features Not Yet Implemented (Time Constraint)
 
 - Deep linking or navigation into race details
 - Custom accessibility actions
 - Full data caching layer
+- Localization and Internationalization
+- Push Notifications(when a user has a saved race and its 10/20 seconds from bet closing time etc.)
 - *Those mentioned in technical decisions above*
 
 ---
