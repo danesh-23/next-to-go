@@ -11,7 +11,7 @@ final class RaceRepositoryImpl: RaceRepository {
 
     // MARK: Lifecycle
 
-    init(remote: NedsAPIClient = NedsAPIClient(), local: LocalRaceDataSource) {
+    init(remote: NedsAPIClient = NedsAPIClient(), local: LocalRaceDataSource? = nil) {
         self.remote = remote
         self.local = local
     }
@@ -51,23 +51,25 @@ final class RaceRepositoryImpl: RaceRepository {
                     advertisedStart: startDate)
                 races.append(race)
             }
-            try await local.saveRaces(races)
+            try await local?.saveRaces(races)
 
             return races
         } catch {
-            // fetchRacesLocalCopy() // Uncomment this line and comment the below one to have a rough persistent storage
-            // solution
+            // TODO: SwiftData
+            // fetchRacesLocalCopy()
+            // Uncomment above line and comment the below one to have a rough persistent storage solution
             throw error
         }
     }
 
     func fetchRacesLocalCopy() async throws -> [Race] {
-        try await local.loadCachedRaces()
+        guard let local else { return [] }
+        return try await local.loadCachedRaces()
     }
 
     // MARK: Private
 
     private let remote: RemoteRaceDataSource
-    private let local: LocalRaceDataSource
+    private let local: LocalRaceDataSource?
 
 }

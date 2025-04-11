@@ -16,22 +16,30 @@ struct CategoryFilterView: View {
     var body: some View {
         Button(action: toggle) {
             HStack(spacing: 4) {
-                if isSelected {
-                    Image(systemName: "checkmark")
-                        .foregroundColor(.white)
-                        .padding(4)
-                        .background(Color.orange)
-                        .clipShape(Circle())
-                }
+                // Always show a circle, color depends on selection
+                Image(systemName: isSelected ? "checkmark.circle.fill" : "circle")
+                    .foregroundColor(isSelected ? .green : .gray)
+                    .font(.title2)
 
-                Image(imageName)
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: 40, height: 40)
-                    .foregroundColor(.gray)
+                VStack(spacing: 4) {
+                    Image(imageName)
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 36, height: 36)
+                        .opacity(isSelected ? 1.0 : 0.5)
+
+                    Text(categoryName)
+                        .font(.caption)
+                        .foregroundColor(.primary)
+                }
             }
+            .padding(8)
+            .clipShape(RoundedRectangle(cornerRadius: 12))
+            .animation(.easeInOut(duration: 0.25), value: isSelected)
         }
         .buttonStyle(.plain)
-        .accessibilityLabel("Toggle \(categoryName)")
+        .accessibilityElement()
+        .accessibilityLabel("Filter by \(categoryName)")
+        .accessibilityHint(isSelected ? "Selected" : "Not selected")
     }
 }

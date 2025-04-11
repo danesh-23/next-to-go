@@ -46,14 +46,19 @@ struct RaceListViewModelTests {
 
     @Test("Toggle updates selected categories and refreshes")
     func testToggleCategoryTogglesAndRefreshes() async throws {
-        let stubbedRaces: [Race] = [.stub(id: "horse", category: .horse)]
+        let stubbedRaces: [Race] = [
+            .stub(id: "horse", category: .horse),
+            .stub(id: "harness", category: .harness),
+            .stub(id: "greyhound", category: .greyhound)
+        ]
         let mockUseCase = MockGetNextRacesUseCase(stubbedRaces: stubbedRaces)
 
         let viewModel = RaceListViewModel(useCase: mockUseCase)
         try await viewModel.toggleCategory(.horse)
 
-        #expect(viewModel.selectedCategories.contains(.horse))
-        #expect(viewModel.races.allSatisfy { $0.category == .horse })
+        #expect(!viewModel.selectedCategories.contains(.horse))
+        #expect(viewModel.selectedCategories.contains(.greyhound))
+        #expect(viewModel.selectedCategories.contains(.harness))
     }
 
     @Test("Failed refresh caught successfully and sets error message")
