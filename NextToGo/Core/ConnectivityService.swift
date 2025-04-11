@@ -10,8 +10,9 @@ import Network
 
 // MARK: - ConnectivityService
 
+@Observable
 @MainActor
-final class ConnectivityService: ObservableObject {
+final class ConnectivityService {
 
     // MARK: Lifecycle
 
@@ -28,7 +29,7 @@ final class ConnectivityService: ObservableObject {
 
     static let shared = ConnectivityService()
 
-    @Published private(set) var isConnected = true
+    private(set) var isConnected = true
 
     // MARK: Private
 
