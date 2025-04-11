@@ -11,7 +11,7 @@ struct RaceListView: View {
 
     // MARK: Internal
 
-    @StateObject var viewModel: RaceListViewModel
+    @State var viewModel: RaceListViewModel
 
     var body: some View {
         NavigationView {

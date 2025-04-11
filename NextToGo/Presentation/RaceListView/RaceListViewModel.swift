@@ -8,8 +8,9 @@
 import Foundation
 import SwiftUI
 
+@Observable
 @MainActor
-class RaceListViewModel: ObservableObject {
+final class RaceListViewModel {
 
     // MARK: Lifecycle
 
@@ -29,15 +30,17 @@ class RaceListViewModel: ObservableObject {
     }
 
     deinit {
-        autoRefreshTask?.cancel()
+        Task { @MainActor [weak self] in
+            self?.autoRefreshTask?.cancel()
+        }
     }
 
     // MARK: Internal
 
-    @Published private(set) var races: [Race] = []
-    @Published var selectedCategories: Set<RaceCategory> = []
-    @Published var errorMessage: String?
-    @Published var isLoading = false
+    private(set) var races: [Race] = []
+    var selectedCategories: Set<RaceCategory> = []
+    var errorMessage: String?
+    var isLoading = false
 
     var autoRefreshTask: Task<Void, Never>?
 
