@@ -52,7 +52,10 @@ class RaceListViewModel: ObservableObject {
 
     func toggleCategory(_ category: RaceCategory) async throws {
         withAnimation {
-            if selectedCategories.contains(category) {
+            if selectedCategories.isEmpty {
+                // Treat as "all selected" – so remove the tapped category
+                selectedCategories = Set(RaceCategory.allCases.filter { $0 != category })
+            } else if selectedCategories.contains(category) {
                 selectedCategories.remove(category)
             } else {
                 selectedCategories.insert(category)
