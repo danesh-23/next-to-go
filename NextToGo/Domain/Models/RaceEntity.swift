@@ -8,6 +8,7 @@
 import Foundation
 import SwiftData
 
+/// RaceEntity represents struct used for persistent storage using SwiftData
 @Model
 final class RaceEntity {
 
