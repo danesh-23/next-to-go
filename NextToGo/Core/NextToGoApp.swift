@@ -22,7 +22,9 @@ struct NextToGoApp: App {
 
 // MARK: - RootContentView
 
-/// This view is used in case SwiftData feature would like to be enabled and by default this is turned off since it was not a feature specified anywhere. Uncomment all TODO: SwiftData lines
+// This view is used in case SwiftData feature would like to be enabled
+// and by default this is turned off since it was not a feature specified anywhere.
+// Uncomment all TODO: SwiftData lines
 // TODO: SwiftData
 struct RootContentView: View {
 //    @Environment(\.modelContext) private var modelContext
