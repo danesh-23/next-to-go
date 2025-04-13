@@ -15,6 +15,7 @@ struct NextToGoApp: App {
     var body: some Scene {
         WindowGroup {
             RootContentView()
+            // swiftlint:disable:next todo
 //                .modelContainer(for: RaceEntity.self) for SWiftData // TODO: SwiftData
         }
     }
@@ -24,7 +25,8 @@ struct NextToGoApp: App {
 
 // This view is used in case SwiftData feature would like to be enabled
 // and by default this is turned off since it was not a feature specified anywhere.
-// Uncomment all TODO: SwiftData lines
+// Uncomment all todo: SwiftData lines
+// swiftlint:disable:next todo
 // TODO: SwiftData
 struct RootContentView: View {
 //    @Environment(\.modelContext) private var modelContext
