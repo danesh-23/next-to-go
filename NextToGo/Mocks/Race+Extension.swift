@@ -13,14 +13,24 @@ extension Race {
         meetingName: String = "Test Track",
         raceNumber: Int = 1,
         category: RaceCategory = .harness,
-        start: Date = .now.addingTimeInterval(60))
+        start: Date = .now.addingTimeInterval(60),
+        raceName: String = "Test Race",
+        venueCountry: String? = nil)
         -> Race {
         Race(
             id: id,
             meetingName: meetingName,
             raceNumber: raceNumber,
+            raceName: raceName,
             category: category,
-            advertisedStart: start)
+            advertisedStart: start,
+            venueCountry: venueCountry)
+    }
+}
+
+extension Date {
+    var roundedToSecond: Date {
+        Date(timeIntervalSince1970: floor(timeIntervalSince1970))
     }
 }
 

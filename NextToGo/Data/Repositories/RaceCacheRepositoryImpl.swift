@@ -27,7 +27,9 @@ final class RaceCacheRepositoryImpl: RaceCacheRepository {
                 number: race.raceNumber,
                 meetingName: race.meetingName,
                 category: race.category.rawValue,
-                advertisedStart: race.advertisedStart)
+                advertisedStart: race.advertisedStart,
+                raceName: race.raceName,
+                venueCountry: race.venueCountry)
             modelContext.insert(entity)
         }
         try modelContext.save()
@@ -42,8 +44,10 @@ final class RaceCacheRepositoryImpl: RaceCacheRepository {
                 id: $0.id,
                 meetingName: $0.meetingName,
                 raceNumber: $0.raceNumber,
+                raceName: $0.raceName,
                 category: RaceCategory(rawValue: $0.category) ?? .greyhound,
-                advertisedStart: $0.advertisedStart)
+                advertisedStart: $0.advertisedStart,
+                venueCountry: $0.venueCountry)
         }
     }
 
@@ -59,5 +63,4 @@ final class RaceCacheRepositoryImpl: RaceCacheRepository {
     // MARK: Private
 
     private let modelContext: ModelContext
-
 }
