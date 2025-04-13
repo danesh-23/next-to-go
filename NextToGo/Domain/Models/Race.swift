@@ -12,6 +12,8 @@ struct Race: Identifiable, Equatable {
     let id: String
     let meetingName: String
     let raceNumber: Int
+    let raceName: String
     let category: RaceCategory
     let advertisedStart: Date
+    let venueCountry: String?
 }
