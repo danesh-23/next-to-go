@@ -45,3 +45,20 @@ extension EndpointType {
     }
 
 }
+
+// MARK: - Endpoint
+
+enum Endpoint {
+
+    // Nested enum for endpoint configuration constants.
+
+    enum Configuration {
+
+        static let kScheme = "https"
+        static let kVersion = "/rest/v1/"
+        static let kServerURL = "api.neds.com.au"
+        static let kExpiryPeriod: Double = 60
+
+    }
+
+}
