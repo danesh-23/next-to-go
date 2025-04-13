@@ -7,26 +7,24 @@
 
 import Foundation
 
-final class RaceRepositoryImpl: RaceRepository {
+final class RaceRepositoryImpl<Remote: API>: RaceRepository where Remote.Endpoint == RacingEndpoint {
 
     // MARK: Lifecycle
 
-    init(remote: NedsAPIClient = NedsAPIClient(), local: LocalRaceDataSource? = nil) {
+    init(remote: Remote = APIImpl<RacingEndpoint>(), local: LocalRaceDataSource? = nil) {
         self.remote = remote
         self.local = local
     }
 
     // MARK: Internal
 
-    typealias RemoteRaceDataSource = NedsAPIClient
+    typealias RemoteRaceDataSource = API
     typealias LocalRaceDataSource = RaceCacheRepository
 
     func fetchNextRaces(count: Int) async throws -> [Race] {
         do {
-            let data = try await remote.fetchNextRacesData(count: count)
-
-            let decoder = JSONDecoder()
-            let apiResponse = try decoder.decode(NextRacesResponse.self, from: data)
+            let endpoint = RacingEndpoint.nextRaces(count: count)
+            let apiResponse: NextRacesResponse = try await remote.request(endpoint)
 
             var races: [Race] = []
             let raceData = apiResponse.data
@@ -47,14 +45,16 @@ final class RaceRepositoryImpl: RaceRepository {
                     id: raceID,
                     meetingName: summary.meetingName,
                     raceNumber: summary.raceNumber,
-                    category: category,
-                    advertisedStart: startDate)
+                    raceName: summary.raceName, category: category,
+                    advertisedStart: startDate,
+                    venueCountry: summary.venueCountry)
                 races.append(race)
             }
             try await local?.saveRaces(races)
 
             return races
         } catch {
+            // swiftlint:disable:next todo
             // TODO: SwiftData
             // fetchRacesLocalCopy()
             // Uncomment above line and comment the below one to have a rough persistent storage solution
@@ -69,7 +69,6 @@ final class RaceRepositoryImpl: RaceRepository {
 
     // MARK: Private
 
-    private let remote: RemoteRaceDataSource
+    private let remote: Remote
     private let local: LocalRaceDataSource?
-
 }

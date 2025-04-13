@@ -1,5 +1,5 @@
 //
-//  NedsAPIClient.swift
+//  API.swift
 //  NextToGo
 //
 //  Created by Danesh Rajasolan on 2025-04-05.
@@ -7,7 +7,7 @@
 
 import Foundation
 
-// MARK: - APIProtocol
+// MARK: - API
 
 protocol API<Endpoint>: Sendable {
     associatedtype Endpoint: EndpointType
@@ -15,7 +15,7 @@ protocol API<Endpoint>: Sendable {
     func request<T: Decodable>(_ endpoint: Endpoint) async throws -> T
 }
 
-// MARK: - API
+// MARK: - APIImpl
 
 /// A simple network client for the Neds Racing API.
 final class APIImpl<Endpoint: EndpointType>: API {
