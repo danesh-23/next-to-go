@@ -23,9 +23,9 @@ A Swift 6-powered race tracking application that displays the next upcoming 5 ra
 - Accessibility support (VoiceOver + Voice Control +Dynamic Text)
 - Offline caching using **SwiftData** with graceful fallback(Optional)
 
-<img src="https://github.com/user-attachments/assets/9ae1b4d0-534f-4a86-9a72-53e94657eef7" height="600">
-<img src="https://github.com/user-attachments/assets/a3861a51-9e07-4ee5-8f2e-27f1f9f82eec" height="600">
-<img src="https://github.com/user-attachments/assets/f952fe50-ffbf-4eac-b306-22c164ff81aa" height="600">
+<img src="https://github.com/user-attachments/assets/32cea561-0504-42af-b2de-b0e64297dd35" height="600">
+<img src="https://github.com/user-attachments/assets/a5008d45-6258-48a6-85dd-5ba61f0071f4" height="600">
+<img src="https://github.com/user-attachments/assets/b1a23935-95d6-46d2-a4cd-ac8326d1dc83" height="600">
 
 ---
 
