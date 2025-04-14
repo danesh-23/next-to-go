@@ -6,8 +6,8 @@
 //
 
 import Foundation
-import Testing
 @testable import NextToGo
+import Testing
 
 struct GetNextRacesUseCaseTests {
     @Test("Filters by selected categories")
@@ -117,7 +117,7 @@ struct GetNextRacesUseCaseTests {
             Race.stub(id: "2", category: .greyhound, start: now.addingTimeInterval(60), venueCountry: "USA"),
             Race.stub(id: "3", category: .harness, start: now.addingTimeInterval(60), venueCountry: "AUS")
         ]
-        let stubbedRaces = races // already exists in currentRaces
+        let stubbedRaces = races
 
         let repo = MockRaceRepository(stubbedRaces: stubbedRaces)
 
