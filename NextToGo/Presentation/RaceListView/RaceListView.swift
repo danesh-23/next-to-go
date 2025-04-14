@@ -42,6 +42,8 @@ struct RaceListView: View {
             }
             .animation(.easeInOut(duration: 0.4), value: viewModel.races)
             .navigationTitle("Next To Go")
+            .toolbarBackground(Color.nedsOrange, for: .navigationBar)
+            .toolbarBackground(.visible, for: .navigationBar)
         }
     }
 
