@@ -148,7 +148,6 @@ Configured with best-practice rules including:
 - Full data caching layer
 - Localization and Internationalization
 - Push Notifications(when a user has a saved race and its 10/20 seconds from bet closing time etc.)
-- Fully built out networking layer - generic and allows to be mocked as well.
 - *Those mentioned in technical decisions above*
 
 ---
