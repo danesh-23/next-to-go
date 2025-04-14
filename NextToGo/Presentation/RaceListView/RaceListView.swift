@@ -16,7 +16,8 @@ struct RaceListView: View {
     var body: some View {
         NavigationView {
             VStack {
-                categoryHeader
+                intlCategoryHeader
+                raceCategoryHeader
                 Spacer()
                 if viewModel.races.isEmpty {
                     if viewModel.isLoading {
@@ -46,8 +47,24 @@ struct RaceListView: View {
 
     // MARK: Private
 
-    private var categoryHeader: some View {
-        HStack(spacing: 12) {
+    private var intlCategoryHeader: some View {
+        HStack {
+            Spacer()
+            CategoryFilterView(
+                categoryName: "INTL",
+                imageName: "pin.location",
+                isSelected: viewModel.intlToggled,
+                toggle: { Task { @MainActor in
+                    try await viewModel.toggleFilterINTL()
+                }
+                })
+                .foregroundStyle(.yellow)
+            Spacer()
+        }
+    }
+
+    private var raceCategoryHeader: some View {
+        HStack {
             ForEach(RaceCategory.allCases, id: \.self) { category in
                 CategoryFilterView(
                     categoryName: category.displayName,

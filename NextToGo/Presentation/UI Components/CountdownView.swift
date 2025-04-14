@@ -20,7 +20,7 @@ struct CountdownView: View {
             let now = context.date
             let remaining = targetDate.timeIntervalSince(now)
             Text(formattedTime(from: remaining))
-                .font(.body.monospacedDigit())
+                .font(.body)
                 .foregroundColor(remaining < 0 ? .red : .primary)
                 .frame(minWidth: 50, alignment: .trailing)
         }
