@@ -21,7 +21,7 @@ final class MockGetNextRacesUseCase: GetNextRacesUseCase {
     let stubbedRaces: [Race]
     let shouldThrow: Bool
 
-    func execute(for _: Set<RaceCategory>, currentRaces _: [Race]) async throws -> [Race] {
+    func execute(for _: Set<RaceCategory>, isINTL _: Bool, currentRaces _: [Race]) async throws -> [Race] {
         if shouldThrow {
             throw NSError(domain: "mock", code: 999)
         }

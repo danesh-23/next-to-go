@@ -20,7 +20,7 @@ struct GetNextRacesUseCaseTests {
         let repo = MockRaceRepository(stubbedRaces: stubbedRaces)
 
         let useCase = GetNextRacesUseCaseImpl(repository: repo)
-        let result = try await useCase.execute(for: [.horse], currentRaces: [])
+        let result = try await useCase.execute(for: [.horse], isINTL: true, currentRaces: [])
 
         #expect(result.allSatisfy { $0.category == .horse })
     }
@@ -35,7 +35,7 @@ struct GetNextRacesUseCaseTests {
         let repo = MockRaceRepository(stubbedRaces: stubbedRaces)
 
         let useCase = GetNextRacesUseCaseImpl(repository: repo)
-        let result = try await useCase.execute(for: [.harness], currentRaces: [])
+        let result = try await useCase.execute(for: [.harness], isINTL: true, currentRaces: [])
 
         #expect(result == [valid])
     }
@@ -49,7 +49,7 @@ struct GetNextRacesUseCaseTests {
         let repo = MockRaceRepository(stubbedRaces: stubbedRaces)
 
         let useCase = GetNextRacesUseCaseImpl(repository: repo)
-        let result = try await useCase.execute(for: [.horse], currentRaces: [current])
+        let result = try await useCase.execute(for: [.horse], isINTL: true, currentRaces: [current])
 
         #expect(result.contains(where: { $0.id == current.id }))
     }
@@ -68,7 +68,7 @@ struct GetNextRacesUseCaseTests {
         let repo = MockRaceRepository(stubbedRaces: stubbedRaces, backupStubbedRaces: backupStubbedRaces)
 
         let useCase = GetNextRacesUseCaseImpl(repository: repo)
-        let result = try await useCase.execute(for: [RaceCategory.horse], currentRaces: [current])
+        let result = try await useCase.execute(for: [RaceCategory.horse], isINTL: true, currentRaces: [current])
 
         #expect(result.count == 5)
     }
@@ -82,7 +82,7 @@ struct GetNextRacesUseCaseTests {
         let repo = MockRaceRepository(stubbedRaces: stubbedRaces)
 
         let useCase = GetNextRacesUseCaseImpl(repository: repo)
-        let result = try await useCase.execute(for: [.horse], currentRaces: [race])
+        let result = try await useCase.execute(for: [.horse], isINTL: true, currentRaces: [race])
         #expect(result.count == 1)
     }
 
@@ -98,11 +98,35 @@ struct GetNextRacesUseCaseTests {
 
         let useCase = GetNextRacesUseCaseImpl(repository: repo)
 
-        let result = try await useCase.execute(for: [.horse, .greyhound], currentRaces: [previouslySelectedHarness])
+        let result = try await useCase.execute(
+            for: [.horse, .greyhound],
+            isINTL: true,
+            currentRaces: [previouslySelectedHarness])
 
         let containsBoth = result.contains(where: { $0.category == .horse }) && result
             .contains(where: { $0.category == .greyhound })
         #expect(containsBoth)
         #expect(result.count == 2)
+    }
+
+    @Test("Filters results based on local or INTL country", arguments: [(true, 2, ["1", "2"]), (false, 1, ["3"])])
+    func testFiltersCountriesINTL(intl: Bool, expectedCount: Int, expectedIDs: [String]) async throws {
+        let now = Date()
+        let races: [Race] = [
+            Race.stub(id: "1", category: .horse, start: now.addingTimeInterval(60), venueCountry: "CAN"),
+            Race.stub(id: "2", category: .greyhound, start: now.addingTimeInterval(60), venueCountry: "USA"),
+            Race.stub(id: "3", category: .harness, start: now.addingTimeInterval(60), venueCountry: "AUS")
+        ]
+        let stubbedRaces = races // already exists in currentRaces
+
+        let repo = MockRaceRepository(stubbedRaces: stubbedRaces)
+
+        let useCase = GetNextRacesUseCaseImpl(repository: repo)
+        let result = try await useCase.execute(for: [.horse, .greyhound, .harness], isINTL: intl, currentRaces: [])
+
+        #expect(result.count == expectedCount)
+        for id in expectedIDs {
+            #expect(result.contains(where: { $0.id == id }))
+        }
     }
 }

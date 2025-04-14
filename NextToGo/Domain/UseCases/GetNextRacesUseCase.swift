@@ -14,7 +14,7 @@ protocol GetNextRacesUseCase: Sendable {
     /// Execute the use case to get next races according to selected categories.
     /// - Parameter categories: The set of categories the user wants to see. If empty, all categories are included.
     /// - Returns: Up to 5 Race entities matching the criteria (sorted by start time, not expired).
-    func execute(for categories: Set<RaceCategory>, currentRaces: [Race]) async throws -> [Race]
+    func execute(for categories: Set<RaceCategory>, isINTL intl: Bool, currentRaces: [Race]) async throws -> [Race]
 }
 
 // MARK: - GetNextRacesUseCaseImpl
@@ -29,7 +29,7 @@ struct GetNextRacesUseCaseImpl: GetNextRacesUseCase {
 
     // MARK: Internal
 
-    func execute(for categories: Set<RaceCategory>, currentRaces: [Race]) async throws -> [Race] {
+    func execute(for categories: Set<RaceCategory>, isINTL intl: Bool, currentRaces: [Race]) async throws -> [Race] {
         do {
             let now = Date()
             let currentCategories = Set(currentRaces.map(\.category))
@@ -38,7 +38,10 @@ struct GetNextRacesUseCaseImpl: GetNextRacesUseCase {
                 if currentCategories == categories || categories.isEmpty {
                     // Reuse only if the same categories / no category selected to save on network call
                     currentRaces.filter {
-                        categories.contains($0.category) && $0.advertisedStart.addingTimeInterval(60) > now
+                        categories.contains($0.category) &&
+                            $0.advertisedStart
+                            .addingTimeInterval(60) > now &&
+                            ($0.venueCountry == "AUS" && !intl || $0.venueCountry != "AUS" && intl)
                     }
                 } else {
                     // Don't reuse if user changed filters
@@ -66,7 +69,9 @@ struct GetNextRacesUseCaseImpl: GetNextRacesUseCase {
 
                     guard categories.isEmpty || categories.contains(race.category) else { continue }
                     guard race.advertisedStart.addingTimeInterval(60) > now else { continue }
-
+                    if intl && race.venueCountry == "AUS" || !intl && race.venueCountry != "AUS" {
+                        continue
+                    }
                     validNewRaces.append(race)
 
                     if (stillValidRaces.count + validNewRaces.count) == maxDesired {
@@ -79,18 +84,7 @@ struct GetNextRacesUseCaseImpl: GetNextRacesUseCase {
                 }
             }
 
-            let combined = (stillValidRaces + validNewRaces)
-                .sorted(by: { firstRace, secondRace in
-                    let lhs = Int(firstRace.advertisedStart.timeIntervalSince1970)
-                    let rhs = Int(secondRace.advertisedStart.timeIntervalSince1970)
-                    if lhs != rhs {
-                        return lhs < rhs
-                    } else {
-                        return firstRace.meetingName < secondRace.meetingName
-                    }
-                })
-
-            return Array(combined.prefix(maxDesired))
+            return Array(sortFinalResults(oldRaces: stillValidRaces, newRaces: validNewRaces).prefix(maxDesired))
         } catch {
             throw error
         }
@@ -100,4 +94,16 @@ struct GetNextRacesUseCaseImpl: GetNextRacesUseCase {
 
     private let repository: RaceRepository
 
+    private func sortFinalResults(oldRaces: [Race], newRaces: [Race]) -> [Race] {
+        (oldRaces + newRaces)
+            .sorted(by: { firstRace, secondRace in
+                let lhs = Int(firstRace.advertisedStart.timeIntervalSince1970)
+                let rhs = Int(secondRace.advertisedStart.timeIntervalSince1970)
+                if lhs != rhs {
+                    return lhs < rhs
+                } else {
+                    return firstRace.meetingName < secondRace.meetingName
+                }
+            })
+    }
 }
