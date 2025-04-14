@@ -12,11 +12,12 @@ A Swift 6-powered race tracking application that displays the next upcoming 5 ra
 4. Build and run on iOS Simulator or device
 5. Run all tests by going to **Product->Test** or hitting **CMD+U**
 
-## ✅ Features Implemented
+## ✅ User Features Implemented
 
 - Always see 5 races depending on category selected.
 - All races can go up to 1 min past the start before disappearing
 - Filter UI for categories with live toggling
+- Filter for international vs local races
 - Pull-to-refresh integration
 - Smooth UI animations and responsive layout
 - Accessibility support (VoiceOver + Voice Control +Dynamic Text)
