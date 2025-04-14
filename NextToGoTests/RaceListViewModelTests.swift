@@ -44,7 +44,7 @@ struct RaceListViewModelTests {
         }))
     }
 
-    @Test("Toggle updates selected categories and refreshes")
+    @Test("Toggle category updates selected categories and refreshes")
     func testToggleCategoryTogglesAndRefreshes() async throws {
         let stubbedRaces: [Race] = [
             .stub(id: "horse", category: .horse),
@@ -70,5 +70,24 @@ struct RaceListViewModelTests {
         await viewModel.refreshManually()
 
         #expect(viewModel.errorMessage != nil)
+    }
+
+    @Test("Toggle INTL filter and refreshes")
+    func testToggleINTLFilterAndRefreshes() async throws {
+        let stubbedRaces: [Race] = [
+            .stub(id: "horse", category: .horse, venueCountry: "AUS"),
+            .stub(id: "harness", category: .harness, venueCountry: "USA"),
+            .stub(id: "greyhound", category: .greyhound, venueCountry: "CAN")
+        ]
+        let mockUseCase = MockGetNextRacesUseCase(stubbedRaces: stubbedRaces)
+
+        let viewModel = RaceListViewModel(useCase: mockUseCase)
+        try await viewModel.toggleFilterINTL()
+
+        #expect(!viewModel.intlToggled)
+
+        try await viewModel.toggleFilterINTL()
+
+        #expect(viewModel.intlToggled)
     }
 }
