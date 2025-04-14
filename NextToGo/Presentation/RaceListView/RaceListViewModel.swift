@@ -41,6 +41,7 @@ final class RaceListViewModel {
     var selectedCategories: Set<RaceCategory> = []
     var errorMessage: String?
     var isLoading = false
+    var intlToggled = true
 
     var autoRefreshTask: Task<Void, Never>?
 
@@ -71,6 +72,17 @@ final class RaceListViewModel {
         }
     }
 
+    func toggleFilterINTL() async throws {
+        withAnimation {
+            intlToggled.toggle()
+        }
+        do {
+            try await refreshRaces()
+        } catch {
+            errorMessage = "Failed to load races for selected filters."
+        }
+    }
+
     // MARK: Private
 
     private let getNextRacesUseCase: GetNextRacesUseCase
@@ -80,7 +92,7 @@ final class RaceListViewModel {
         guard ConnectivityService.shared.isConnected else { throw NetworkError.offline }
         do {
             let updatedRaces = try await getNextRacesUseCase.execute(
-                for: selectedCategories,
+                for: selectedCategories, isINTL: intlToggled,
                 currentRaces: races)
             withAnimation {
                 self.races = updatedRaces
@@ -110,5 +122,4 @@ final class RaceListViewModel {
             }
         }
     }
-
 }

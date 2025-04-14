@@ -23,11 +23,13 @@ struct RaceRowView: View {
                 .frame(width: 40, height: 40)
                 .accessibilityHidden(true) // hide icon itself from VoiceOver, described in label.
             VStack(alignment: .leading) {
-                Text(race.meetingName)
-                    .font(.headline)
-                Text("Race \(race.raceNumber)")
-                    .font(.subheadline)
-                    .foregroundColor(.secondary)
+                Text("\(race.meetingName) R\(race.raceNumber)")
+                    .font(.body)
+                if let venue = race.venueCountry {
+                    Text(venue)
+                        .font(.subheadline)
+                        .foregroundStyle(.secondary)
+                }
             }
             Spacer()
             CountdownView(targetDate: race.advertisedStart)
